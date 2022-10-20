@@ -29,26 +29,8 @@ public class JsonContainsPattern {
   }
 
   private boolean matches(JsonNode patternNode, JsonNode actualNode) {
-    if (patternNode.isTextual() && "#string".equals(patternNode.asText())) {
-      return actualNode.isTextual();
-    }
-    if (patternNode.isTextual() && "#number".equals(patternNode.asText())) {
-      return actualNode.isNumber();
-    }
-    if (patternNode.isTextual() && "#array".equals(patternNode.asText())) {
-      return actualNode.isArray();
-    }
-    if (patternNode.isTextual() && "#object".equals(patternNode.asText())) {
-      return actualNode.isObject();
-    }
-    if (patternNode.isTextual() && "#present".equals(patternNode.asText())) {
-      return actualNode == null;
-    }
-    if (patternNode.isTextual() && "#notpresent".equals(patternNode.asText())) {
-      return actualNode == null;
-    }
     if (patternNode.isValueNode()) {
-      return patternNode.equals(actualNode);
+      return new ValueNodeMatcher(patternNode).matches(actualNode);
     }
     if (patternNode.isArray()) {
       return matchesArray(patternNode, actualNode);
